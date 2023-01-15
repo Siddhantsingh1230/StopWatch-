@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <title>StopWatch</title>
+
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+    <style type="text/css" media="all">
+
+      * {
+
+        margin: 0px;
+
+        padding: 0px;
+
+        background-color: black;
+
+        font-family: Roboto;
+
+      }
+
+      .container {
+
+        height: 100vh;
+
+        width: 100vw;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        position: relative;
+
+      }
+
+      .watch {
+
+        position: absolute;
+
+        top: 180px;
+
+        z-index: 2;
+
+      }
+
+      .move {
+
+        position: absolute;
+
+        top: 168px;
+
+        height: 70px;
+
+        width: 70px;
+
+        animation-name: spin;
+
+        animation-iteration-count: infinite;
+
+        animation-timing-function: linear;
+
+        animation-play-state: paused;
+
+        animation-duration: 60s;
+
+        z-index: 1;
+
+      }
+
+      .move::before {
+
+        content: "";
+
+        position: absolute;
+
+        width: 10px;
+
+        height: 10px;
+
+        top: -90px;
+
+        left: 20px;
+
+        border-radius: 50%;
+
+        background-color: #067bd0;
+
+      }
+
+      @keyframes spin {
+
+        100% {
+
+          transform: rotate(360deg);
+
+        }
+
+      }
+
+      .btn-container {
+
+        position: absolute;
+
+        bottom: 80px;
+
+        width: 100vw;
+
+        display: flex;
+
+        justify-content: center;
+
+        align-items: center;
+
+        text-align: center;
+
+      }
+
+      .digit {
+
+        font-size: 40px;
+
+        color: white;
+
+      }
+
+      .sign {
+
+        font-size: 40px;
+
+        color: white;
+
+      }
+
+      .btn {
+
+        font-size: 30px;
+
+        color: white;
+
+        font-weight: bold;
+
+      }
+
+      #count,
+
+      #period {
+
+        color: #067bd0;
+
+      }
+
+      #start {
+
+        background-color: #067bd0;
+
+        border-radius: 50%;
+
+        display: inline-block;
+
+        width: 55px;
+
+        height: 55px;
+
+        text-align: center;
+
+        padding: 5px;
+
+        box-sizing: border-box;
+
+        margin: 0px 50px;
+
+      }
+
+      #start:active,
+
+      #reset:active,
+
+      #pause:active {
+
+        opacity: 0.7;
+
+      }
+
+    </style>
+
+  </head>
+
+  <body onload="scroll()">
+
+    <div id="container"class="container">
+
+      <div class="watch">
+
+        <span class="digit" id="min">00</span>
+
+        <span class="sign">:</span>
+
+        <span class="digit" id="sec">00</span>
+
+        <span id="period" class="sign">.</span>
+
+        <span class="digit" id="count">00</span>
+
+      </div>
+
+      <div id="move" class="move"></div>
+
+      <div class="btn-container">
+
+        <span onclick="reset()" id="reset" class="btn">↻</span>
+
+        <span onclick="start()" id="start" class="btn">▷</span>
+
+        <span onclick="pause()" id="pause" class="btn">| |</span>
+
+      </div>
+
+    </div>
+
+    <script type="text/javascript" charset="utf-8">
+
+      let container=document.getElementById('container');
+
+      let min = document.getElementById("min");
+
+      let sec = document.getElementById("sec");
+
+      let count = document.getElementById("count");
+
+      let counter = 0;
+
+      let second = 0;
+
+      let minute = 0;
+
+      let flag = 0;
+
+      let timeout_id;
+
+      let element=document.getElementById('move');
+
+      function start() {
+
+        if (flag == 0) {
+
+          flag = 1;
+
+          timeout_id = setInterval(function () {
+
+            counter++;
+
+            if (counter > 99) {
+
+              counter = 0;
+
+              second++;
+
+              if (second == 60) {
+
+                counter = 0;
+
+                second = 0;
+
+                minute++;
+
+                if (minute < 10) {
+
+                  min.innerText = "0" + minute;
+
+                } else {
+
+                  min.innerText = minute;
+
+                }
+
+              }
+
+            }
+
+            if (second < 10) {
+
+              sec.innerText = "0" + second;
+
+            } else {
+
+              sec.innerText = second;
+
+            }
+
+            if (counter < 10) {
+
+              count.innerText = "0" + counter;
+
+            } else {
+
+              count.innerText = counter;
+
+            }
+
+          }, 10);
+
+        }
+
+        element.style.animation= 'spin 60s linear infinite';
+
+        element.style.animationPlayState = 'running';
+
+      }
+
+      function pause() {
+
+        flag = 0;
+
+        
+
+        clearInterval(timeout_id);
+
+        element.style.animationPlayState = 'paused';
+
+      }
+
+      function reset() {
+
+        pause();
+
+        count.innerText = "00";
+
+        min.innerText = "00";
+
+        sec.innerText = "00";
+
+        minute = 0;
+
+        second = 0;
+
+        counter = 0;
+
+        element.style.animation= 'none';
+
+        element.style.animationPlayState = 'paused';
+
+      }
+
+      function scroll(){
+
+        window.scrollTop=window.scrollHeight;
+
+      }
+
+    </script>
+
+  </body>
+
+</html>
+
